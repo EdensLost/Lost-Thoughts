@@ -125,9 +125,9 @@ public class FileH {
     }
 
     // Encrypt string
-    public static String encryptString(String toEncrypt) {
+    public static String encryptString(String toEncrypt, String key) {
         char[] encryptChars = toEncrypt.toCharArray();
-        char[] keyChars = "You shouldn't be reading this".toCharArray();
+        char[] keyChars = key.toCharArray();
 
         String encryptedString = "";
 
@@ -142,9 +142,9 @@ public class FileH {
     }
 
     // Decrypt string
-    public static String decryptString(String toDecrypt) {
+    public static String decryptString(String toDecrypt, String key) {
         char[] encryptChars = toDecrypt.toCharArray();
-        char[] keyChars = "You shouldn't be reading this".toCharArray();
+        char[] keyChars = key.toCharArray();
 
         String decryptedString = "";
 
@@ -157,8 +157,4 @@ public class FileH {
         return decryptedString;
     }
 
-    public static void main(String[] args) {
-        PyJav.printl(getFilePath("game.jar"));
-        
-    }
 }
