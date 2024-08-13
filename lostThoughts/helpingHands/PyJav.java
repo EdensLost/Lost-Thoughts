@@ -1,4 +1,4 @@
-package helpers;
+package lostThoughts.helpingHands;
 
 
 import java.util.Scanner;

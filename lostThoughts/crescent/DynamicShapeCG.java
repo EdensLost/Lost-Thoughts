@@ -1,6 +1,9 @@
-package crescentG;
+package lostThoughts.crescent;
 import java.awt.*;
 import java.awt.geom.Path2D;
+
+import lostThoughts.helpingHands.PyJav;
+
 
 //DynamicShape 
     /**
@@ -11,6 +14,8 @@ public class DynamicShapeCG {
     private double scale;
     private Color color;
     private XYPointCG startPoint;
+    private XYPointCG offsetPoint;
+    private XYPointCG currentPoint;
     private XYPointCG[] pointList;
     private boolean[] curveList;
     private XYPointCG[][] bezierList;
@@ -29,6 +34,9 @@ public class DynamicShapeCG {
         scale = shapeScale;
         color = shapeColor;
         startPoint = shapeStartPoint;
+        offsetPoint = new XYPointCG(0, 0);
+        currentPoint = new XYPointCG(0, 0);
+        updateCurrentPoint();
         pointList = shapePointList;
         curveList = shapeCurveList;
         bezierList = shapeBezierList;
@@ -46,6 +54,9 @@ public class DynamicShapeCG {
         scale = shapeScale;
         color = shapeColor;
         startPoint = shapeStartPoint;
+        offsetPoint = new XYPointCG(0, 0);
+        currentPoint = new XYPointCG(0, 0);
+        updateCurrentPoint();
         pointList = shapePointList;
 
         curveList = new boolean[shapePointList.length];
@@ -70,7 +81,7 @@ public class DynamicShapeCG {
      */
     public DynamicShapeCG clone() {
 
-        return new DynamicShapeCG(scale, color, startPoint, pointList);
+        return new DynamicShapeCG(scale, color, currentPoint, pointList);
     }
     
 // [Sets]
@@ -99,6 +110,29 @@ public class DynamicShapeCG {
      */
     public void setStartPoint(XYPointCG newStartPoint) {
         startPoint = newStartPoint;
+        updateCurrentPoint();
+    }
+
+    /**
+     * Used to set the offset point of the shape
+     * 
+     * @param newOffsetPoint = The offset point of the shape to set
+     */
+    public void setOffsetPoint(XYPointCG newOffsetPoint) {
+        offsetPoint = newOffsetPoint;
+        updateCurrentPoint();
+        
+    }
+
+    /**
+     * Updates the current point by adding the offset point to the start point
+     */
+    public void updateCurrentPoint() {
+        currentPoint.setX(startPoint.getX() + offsetPoint.getX());
+        currentPoint.setY(startPoint.getY() + offsetPoint.getY());
+        
+        //PyJav.printl("" + currentPoint);
+        
     }
 
     /**
@@ -155,6 +189,22 @@ public class DynamicShapeCG {
     }
 
     /**
+     * Used to get the offset point of the shape
+     * 
+     */
+    public XYPointCG getOffsetPoint() {
+        return offsetPoint;
+    }
+
+    /**
+     * Used to get the current point of the shape
+     * 
+     */
+    public XYPointCG getCurrentPoint() {
+        return currentPoint;
+    }
+
+    /**
      * Used to get the points list of the shape
      * 
      */
@@ -192,7 +242,7 @@ public class DynamicShapeCG {
      */
     private Path2D.Double bezierFromDynamic(Graphics2D g2d, DynamicShapeCG shape) {
         Path2D.Double path = genBezierShape(g2d, shape.scale, shape.color, 
-        shape.startPoint, shape.pointList, shape.curveList, shape.bezierList);
+        shape.currentPoint, shape.pointList, shape.curveList, shape.bezierList);
 
         return path;
     }
@@ -205,19 +255,19 @@ public class DynamicShapeCG {
      * @param g2d = The Graphics2D to add the shape to
      * @param scale = The scale of the shape
      * @param color = The color of the object
-     * @param startPoint = The point where the shape starts (center)
+     * @param genPoint = The point where the shape starts (center)
      * @param pointList = The list of each point in the shape
      * @param curveList = The boolean list of which points curve
      * @param bezierList = The list of each curves beziers
      * 
      * @return {@code Path2D.Double} = The path shape
      */
-    private Path2D.Double genBezierShape(Graphics2D g2d, double scale, Color color, XYPointCG startPoint, XYPointCG[] pointList, boolean[] curveList, XYPointCG[][] bezierList){ 
+    private Path2D.Double genBezierShape(Graphics2D g2d, double scale, Color color, XYPointCG genPoint, XYPointCG[] pointList, boolean[] curveList, XYPointCG[][] bezierList){ 
         
         Path2D.Double path = new Path2D.Double();
 
-        double startX = startPoint.getX();
-        double startY = startPoint.getY();
+        double startX = genPoint.getX();
+        double startY = genPoint.getY();
 
         path.moveTo(startX, startY);
 

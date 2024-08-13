@@ -1,4 +1,4 @@
-package crescentG;
+package lostThoughts.crescent;
 
 import java.awt.*;
 
@@ -10,6 +10,8 @@ public class TextCG {
     private int thisScale;
     private Color thisColor;
     private XYPointCG thisStartPoint;
+    private XYPointCG thisOffsetPoint;
+    private XYPointCG thisCurrentPoint;
     private boolean thisIsCentered;
     private Font thisFont;
     
@@ -28,6 +30,9 @@ public class TextCG {
         thisScale = scale;
         thisColor = color;
         thisStartPoint = startPoint;
+        thisOffsetPoint = new XYPointCG(0, 0);
+        thisCurrentPoint = new XYPointCG(0, 0);
+        updateCurrentPoint();
         thisIsCentered = isCentered;
         thisFont = new Font("Arial", Font.PLAIN, thisScale);
 
@@ -48,6 +53,9 @@ public class TextCG {
         thisScale = curFont.getSize();
         thisColor = color;
         thisStartPoint = startPoint;
+        thisOffsetPoint = new XYPointCG(0, 0);
+        thisCurrentPoint = new XYPointCG(0, 0);
+        updateCurrentPoint();
         thisIsCentered = isCentered;
         thisFont = curFont;
 
@@ -72,8 +80,8 @@ public class TextCG {
             int textAscent = metrics.getAscent();
 
             // Calculate the position to center the text
-            int centeredX = (int) thisStartPoint.getX() - textWidth / 2;
-            int centeredY = (int) thisStartPoint.getY() + textAscent - textHeight / 2;
+            int centeredX = (int) thisCurrentPoint.getX() - textWidth / 2;
+            int centeredY = (int) thisCurrentPoint.getY() + textAscent - textHeight / 2;
 
             // Draws the text
             g2d.drawString(thisText, centeredX, centeredY);
@@ -82,7 +90,7 @@ public class TextCG {
             g2d.setFont(thisFont);
             g2d.setColor(thisColor);
 
-            g2d.drawString(thisText, (int) thisStartPoint.getX(), (int) thisStartPoint.getY());
+            g2d.drawString(thisText, (int) thisCurrentPoint.getX(), (int) thisCurrentPoint.getY());
         }
 
         return this;
@@ -125,6 +133,22 @@ public class TextCG {
      */
     public XYPointCG getStartPoint () {
         return thisStartPoint;
+    }
+
+    /**
+     * Used to get the offset point of the text
+     * 
+     */
+    public XYPointCG getOffsetPoint() {
+        return thisOffsetPoint;
+    }
+
+    /**
+     * Used to get the current point of the text
+     * 
+     */
+    public XYPointCG getCurrentPoint() {
+        return thisCurrentPoint;
     }
 
     /**
@@ -176,6 +200,25 @@ public class TextCG {
      */
     public void setStartPoint (XYPointCG newStartPoint) {
         thisStartPoint = newStartPoint;
+        updateCurrentPoint();
+    }
+
+    /**
+     * Used to set the offset point of the text
+     * 
+     * @param newOffsetPoint = The offset point of the text to set
+     */
+    public void setOffsetPoint(XYPointCG newOffsetPoint) {
+        thisOffsetPoint = newOffsetPoint;
+        updateCurrentPoint();
+    }
+
+    /**
+     * Updates the current point by adding the offset point to the start point
+     */
+    public void updateCurrentPoint() {
+        thisCurrentPoint.setX(thisStartPoint.getX() + thisOffsetPoint.getX());
+        thisCurrentPoint.setY(thisStartPoint.getY() + thisOffsetPoint.getY());
     }
 
     /**

@@ -1,4 +1,4 @@
-package helpers;
+package lostThoughts.helpingHands;
 
 import java.io.File;
 import java.io.FileWriter;
@@ -96,7 +96,7 @@ public class FileH {
      * 
      * @return {@code String} = The string representation of the filepath
      */
-    public static String getFilePath(String filepath) {
+    public static String getExternalFilePath(String filepath) {
         // Get the location of the file
         CodeSource codeSource = FileH.class.getProtectionDomain().getCodeSource();
         File jarFile;
@@ -105,9 +105,40 @@ public class FileH {
 
             // Get the parent directory of the JAR file
             Path parentDir = jarFile.getParentFile().toPath();
-
-            PyJav.printl(parentDir.toString());
             
+
+            // Define the file path in the parent directory
+            Path filePath = Paths.get(parentDir.toString(), filepath);
+
+            // Convert Path to String for file operations
+            return filePath.toString();
+
+        } catch (URISyntaxException e) {
+            PyJav.printl("Something went wrong: No " + filepath + " in directory");
+            
+        }
+        
+        return "";
+        
+    }
+
+    // Get internal filepath
+    /**
+     * Used to obtain the path of a file starting from the inside of the jar
+     * 
+     * @param filepath = The path including the filename and type of the desired file
+     * 
+     * @return {@code String} = The string representation of the filepath
+     */
+    public static String getInternalFilePath(String filepath) {
+        // Get the location of the file
+        CodeSource codeSource = FileH.class.getProtectionDomain().getCodeSource();
+        File jarFile;
+        try {
+            jarFile = new File(codeSource.getLocation().toURI().getPath());
+
+            // Get the parent directory of the JAR file
+            Path parentDir = jarFile.toPath();
 
             // Define the file path in the parent directory
             Path filePath = Paths.get(parentDir.toString(), filepath);

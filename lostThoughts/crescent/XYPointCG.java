@@ -1,6 +1,6 @@
-package crescentG;
+package lostThoughts.crescent;
 
-import helpers.UtilH;
+import lostThoughts.helpingHands.UtilH;
 
 public class XYPointCG {
     private double[] point;

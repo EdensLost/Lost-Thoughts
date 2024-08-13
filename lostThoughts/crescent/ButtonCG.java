@@ -1,4 +1,4 @@
-package crescentG;
+package lostThoughts.crescent;
 
 import java.awt.*;
 

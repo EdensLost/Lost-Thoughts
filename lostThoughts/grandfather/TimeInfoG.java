@@ -1,6 +1,6 @@
-package helpers;
+package lostThoughts.grandfather;
 
-public class TimeH {
+public class TimeInfoG {
 
     // ***[Time Conversions]***
     public static int SEC_MIN = 60;

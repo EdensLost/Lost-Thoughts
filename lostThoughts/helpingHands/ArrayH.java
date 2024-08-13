@@ -1,4 +1,4 @@
-package helpers;
+package lostThoughts.helpingHands;
 
 public class ArrayH {
     
